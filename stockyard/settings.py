@@ -123,4 +123,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 #STATIC_ROOT = 'D:/stockyard/main/static'
-STATIC_ROOT = '<Replace with your static root folder>'
+#STATIC_ROOT = '<Replace with your static root folder>'
