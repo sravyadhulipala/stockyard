@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <title>Stockyard Management Tool</title>
+{% load static %}
+  <!-- Favicons -->
+  <link href={% static "main/img/favicon.ico" %}rel="icon">
+  <link href={% static "main/img/apple-touch-icon.png" %} rel="apple-touch-icon">
+
+  <!-- Bootstrap core CSS -->
+  <link href={% static "main/lib/bootstrap/css/bootstrap.min.css" %} rel="stylesheet">
+  
+  <!--external css-->
+  <link href={% static "main/lib/font-awesome/css/font-awesome.css" %} rel="stylesheet" />
+  <link type="text/css" href= {% static "main/css/zabuto_calendar.css" %} rel="stylesheet" >
+  <link type="text/css" href= {% static "main/lib/gritter/css/jquery.gritter.css" %} rel="stylesheet" />
+  
+  <!-- Custom styles for this template -->
+  <link href={% static "main/css/styles.css" %} rel="stylesheet" />
+  <link href= {% static "main/css/style-responsive.css" %}rel="stylesheet" />
+  <script src={% static "main/lib/datetime.js" %}></script>
+  <script src={% static "main/lib/tempandmoistchart.js" %}></script>
+ <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  
+</head>
+
+<body onload="datetime();irontemp();ironmoist()">
+  <section id="container">
+    <!-- **********************************************************************************************************************************************************
+        TOP BAR CONTENT & NOTIFICATIONS
+        *********************************************************************************************************************************************************** -->
+    <!--header start-->
+    <header class="header black-bg">
+      <div class="sidebar-toggle-box">
+        <div class="fa fa-bars tooltips" data-placement="right" style="color:white" data-original-title=" "></div>
+      </div>
+      <!--logo start-->
+      <a href="{% url 'main:inventory' %}" class="logo"><b><span>STOCKYARD</span> MANAGEMENT TOOL&nbsp&nbsp</b></a>
+      <!--logo end-->
+      
+	    
+       <div class="top-menu">
+	   <ul class="nav pull-right top-menu">
+          <li><a class="reports" href="{% url 'main:homepage' %}">Logout</a></li>
+        </ul>
+	    <!--<ul class="nav top-menu">
+		  <li class="top">
+		    <a class="pages" href="inventory.html"><i class="fa fa-truck"></i><span>&nbspIncoming Inventory</span></a>
+          </li>
+          <li class="top">
+		    <a  class="active" class="pages" href="stockyard.html"><i class="fa fa-picture-o"></i><span>&nbspMonitor Stockyard</span></a>
+          </li>
+		  <li class="top">
+            <a class="pages" href="forecasting.html"><i class="fa fa-bar-chart-o"></i><span>&nbspMaterial Forecasting</span></a>
+          </li>
+		  <li class="top">
+             <a class="pages" href="plan.html"><i class="fa fa-edit"></i><span>&nbspPlan & schedule</span></a>
+          </li>
+		  <li class="top">
+             <a class="pages" href="reports.html"><i class="fa fa-book"></i><span>&nbspReports</span></a>
+          </li>
+        </ul>-->
+       </div>
+    </header>
+    <!--header end-->
+    <!-- **********************************************************************************************************************************************************
+        MAIN SIDEBAR MENU
+        *********************************************************************************************************************************************************** -->
+    <!--sidebar start-->
+   <aside>
+      <div id="sidebar" class="nav-collapse ">
+        <!-- sidebar menu start-->
+		<br>
+        <ul class="sidebar-menu" id="nav-accordion">
+          <p class="centered"><a href="{% url 'main:profile' %}"><img src={% static "main/img/user.jpg" %} class="img-circle" width="80"></a></p>
+          <h5 class="centered" style="color:white;font-family:arial">Welcome<br>Arthur Allan<br></h5>
+		  <h6 class="centered" style="color:white;font-family:arial">Time: <span id="curtime"></span></h5>
+		  <h6 class="centered" style="color:white;font-family:arial">Date: <span id="curdate"></span></h5>
+          <br><br>
+		 <li class="mt">
+            <a href="#">
+              <i class="fa fa-home"></i>
+              <span>Overview</span>
+              </a>
+          </li>
+		  <li class="sub-menu">
+            <a href="javascript:;">
+              <i class="fa fa-shopping-cart"></i>
+              <span>Materials</span>
+			   <i class="fa fa-caret-down" style="padding-left:67px"></i>
+              </a>
+            <ul class="sub">
+              <li><a href="#">Iron</a></li>
+              <li><a href="#">Coal</a></li>
+			  <li><a href="#">Limestone</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:;">
+              <i class="fa fa-warning"></i>
+              <span>Alerts</span>
+			   <i class="fa fa-caret-down" style="padding-left:88px"></i>
+              </a>
+            <ul class="sub">
+              <li><a href="#">Combustion alert</a></li>
+              <li><a href="#">Safety alarm</a></li>
+			  <li><a href="#">Warnings</a></li>
+			  <li><a href="#">Delays</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:;">
+              <i class="fa fa-wrench"></i>
+              <span>Action</span>
+			  <i class="fa fa-caret-down" style="padding-left:86px"></i>
+              </a>
+            <ul class="sub">
+               <li><a href="#drone" onclick="adddetails();document.getElementById('launch').style.color = 'black';"><span id="launch">Launch drone</span></a></li>
+               <li><a href="#">Update scan</a></li>
+			   <li><a href="#">Spray water</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:;">
+              <i class="fa fa-bar-chart-o"></i>
+              <span>Analysis</span>
+			   <i class="fa fa-caret-down" style="padding-left:72px"></i>
+              </a>
+            <ul class="sub">
+               <li><a href="#">Image analysis</a></li>
+              <li><a href="#">Trend analysis</a></li>
+			  <li><a href="#">Material quality metrics</a></li>
+			  <li><a href="#">Stockyard metrics</a></li>
+            </ul>
+          </li>
+            <li class="sub-menu">
+            <a href="javascript:;">
+              <i class="fa fa-question-circle"></i>
+              <span>Help</span>
+			   <i class="fa fa-caret-down" style="padding-left:95px"></i>
+              </a>
+            <ul class="sub">
+               <li><a href="#">24/7 Tool support</a></li>
+              <li><a href="#">Troubleshooting</a></li>
+			  <li><a href="#">Instructions</a></li>
+			   <li><a href="#">FAQs</a></li>
+            </ul>
+          </li>
+         </ul>
+        <!-- sidebar menu end-->
+      </div>
+    </aside>
+    <!--sidebar end-->
+    <!-- **********************************************************************************************************************************************************
+        MAIN CONTENT
+        *********************************************************************************************************************************************************** -->
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper">
+	   <div class="row" style="padding-left:30px">
+	       <ul class="nav top-menu">
+		  <li class="top">
+		    <a class="pages" href="{% url 'main:inventory' %}"><i class="fa fa-truck"></i><span>&nbspIncoming Inventory</span></a>
+          </li>
+          <li class="top">
+		    <a  class="active" class="pages" href="{% url 'main:stockyard' %}"><i class="fa fa-picture-o"></i><span>&nbspMonitor Stockyard</span></a>
+          </li>
+		  <li class="top">
+            <a class="pages" href="{% url 'main:forecasting' %}"><i class="fa fa-bar-chart-o"></i><span>&nbspMaterial Forecasting</span></a>
+          </li>
+		  <li class="top">
+             <a class="pages" href="{% url 'main:plan' %}"><i class="fa fa-edit"></i><span>&nbspPlan & schedule</span></a>
+          </li>
+		  <li class="top">
+             <a class="pages" href="{% url 'main:reports' %}"><i class="fa fa-book"></i><span>&nbspReports</span></a>
+          </li>
+        </ul>
+	  </div>
+        <div class="row" style="border-bottom:thin solid #A9A9A9;border-top:thin solid #A9A9A9;border-left:thin solid #A9A9A9;border-right:thin solid #A9A9A9">
+		 <div class="col-lg-6" style="padding-top:80px;padding-bottom:-20px" >
+		    <img src={% static "main/img/thermal.png" %} id="processed" height="400px" width="100%">
+			<br><br>
+			<button type="button" class="btn btn-warning" onclick="window.location.href='/stockyard'">&nbsp&nbsp&nbsp&nbspActual view&nbsp&nbsp&nbsp&nbsp</button>
+              &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			  <button type="button" class="btn btn-warning active" onclick="window.location.href='/stockyardprocessed'">&nbsp&nbspProcessed view&nbsp&nbsp</button>
+              &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			  <button type="button" class="btn btn-warning" onclick="window.location.href='/stockyardsliced'">&nbsp&nbsp&nbsp&nbspSliced view&nbsp&nbsp&nbsp&nbsp</button>
+		<br><br><br><br>
+		<div class="row">
+		<div class="col-sm-12" style="max-height:200px;overflow-y:scroll">
+		<table id="drone">
+		
+		<tr>
+			<th>Drone ID</th>
+			<th>Time</th>
+			<th>Image Captured</th>
+			<th>Stockpile Name</th>
+			<th>Action Status</th>
+		</tr>
+		<tr>
+			<td id="di1">450276853</td>
+			<td id="t1">29/3/2020&nbsp12:44:43</span></td>
+			<td id="di2">IMG1908</td>
+			<td id="di3">S1A1</td>
+			<td id="di4">Action in progress</td>
+		</tr>
+		<tr>
+			<td id="di5">450276853</td>
+			<td id="t2">28/3/2020&nbsp11:34:16</span></td>
+			<td id="di6">IMG1907</td>
+			<td id="di7">S1A2</td>
+			<td id="di8" style="color:red">Action due</td>
+		</tr>
+		<tr>
+			<td id="di9">450276853</td>
+			<td id="t3">20/3/2020&nbsp8:53:45</td>
+			<td id="di10">IMG1906</td>
+			<td id="di11">S1A3</td>
+			<td id="di12" style="color:green">Action completed</td>
+		</tr>
+		<tr>
+			<td id="di9">450276853</td>
+			<td id="t4">3/3/2020&nbsp6:14:16</td>
+			<td id="di10">IMG1905</td>
+			<td id="di11">S1A3</td>
+			<td id="di12" style="color:green">Action completed</td>
+		</tr>
+		<tr>
+			<td id="di9">450276853</td>
+			<td id="t5">28/2/2020&nbsp13:54:6</td>
+			<td id="di10">IMG1904</td>
+			<td id="di11">S1A3</td>
+			<td id="di12" style="color:green">Action completed</td>
+		</tr>
+		</table>
+        </div>
+		</div>
+
+
+		</div>
+		 <div class="col-lg-6" style="padding-top:30px;padding-bottom:30px;border-left:thin solid #A9A9A9" align="center">
+		     <div class="btn-group" >
+                <div class="btn-group">
+                  <button type="button" class="btn btn-theme04" 
+				  onclick="document.getElementById('processed').src='{% static 'main/img/IronOre.png' %}';irondetails();irontemp();ironmoist()">&nbsp&nbsp&nbspIron ore&nbsp&nbsp&nbsp</button>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-theme04" 
+				  onclick="document.getElementById('processed').src= '{% static 'main/img/Coal.png' %}';coaldetails();coaltemp();coalmoist()">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspCoal&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-theme04" 
+				  onclick="document.getElementById('processed').src= '{% static 'main/img/Limestone.png' %}';limedetails();limetemp();limemoist()">Limestone</button>
+                </div>
+			  </div> 
+			  <div class="row" style="padding-top:-40px">
+			      <div class="col-sm-6" style="max-height:350px;overflow-y:scroll">
+				   <div id='tempchart'></div>
+					
+				  </div>
+			      <div class="col-sm-6" style="max-height:350px;overflow-y:scroll">
+				   <div id='moistchart'></div>
+				    
+				  </div>				  
+			  </div>
+			
+			     <div class="row" >
+			      <div class="col-lg-6" style="padding-top:138px;">
+				   <p style="color:black;"><b>Proximate analysis</b></p>
+				    <table border="1" height="200px" width="100%" >
+	
+			<tr>
+				<td align="center"><span id="ph1">Temperature </span><br></td>
+				<td align="center"><span id="pi1">34.3&#8451 </span><br></td>
+			</tr>
+			<tr>
+				<td align="center"><span id="ph2">Moisture </span><br></td>
+				<td align="center"><span id="pi2">12% </span><br></td>
+			</tr>
+			<tr>
+				<td align="center"><span id="ph3"></span><br></td>
+				<td align="center"><span id="pi3"></span><br></td>
+			</tr>
+			<tr>
+				<td align="center"><span id="ph4"></span><br></td>
+				<td align="center"><span id="pi4"></span><br></td>
+			</tr>
+			<tr>
+				<td align="center"><span id="ph5">Volatile Matter </span><br></td>
+				<td align="center"><span id="pi5">33.0%</span><br></td>
+			</tr>
+			<tr>
+				<td align="center"><span id="ph6"></span><br></td>
+				<td align="center"><span id="pi6"></span><br></td>
+			</tr>
+			</table>
+				  </div>
+			      <div class="col-lg-6" style="padding-top:138px">
+				     <p style="color:black;"><b>Elemental analysis</b></p>
+				    <table border="1" height="200px" width="100%">
+					
+			<tr>
+				<td align="center"><span id="eh1">Pyritic Sulphur </span><br></td>
+				<td align="center"><span id="ei1">3.80% </span><br></td>
+			</tr>
+			<tr>
+				<td align="center"><span id="eh2">Sulphate Sulphur </span><br></td>
+				<td align="center"><span id="ei2">0.39% </span><br></td>
+			</tr>
+			<tr>
+				<td align="center"><span id="eh3">Thermal conductivity </span><br></td>
+				<td align="center"><span id="ei3">421 Kcal Kg </span><br></td>
+			</tr>
+			<tr>
+				<td align="center"><span id="eh4"></span><br></td>
+				<td align="center"><span id="ei4"></span><br></td>
+			</tr>
+			<tr>
+				<td align="center"><span id="eh5"></span><br></td>
+				<td align="center"><span id="ei5"></span><br></td>
+			</tr>
+			<tr>
+				<td align="center"><span id="eh6"></span><br></td>
+				<td align="center"><span id="ei6"></span><br></td>
+			</tr>
+			</table>
+				  </div>				  
+			</div>
+	    </div>
+	 
+		</div>		
+		<br>
+      </section>
+    </section>
+    <!--main content end-->
+    
+  </section>
+  <!-- js placed at the end of the document so the pages load faster -->
+   <script src={% static "main/lib/jquery/jquery.min.js" %} ></script>
+
+  <script src= {% static "main/lib/bootstrap/js/bootstrap.min.js" %}></script>
+  <script class="include" type="text/javascript" src= {% static "main/lib/jquery.dcjqaccordion.2.7.js" %}></script>
+  <script src={% static "main/lib/jquery.scrollTo.min.js" %}></script>
+  <script src={% static "main/lib/jquery.nicescroll.js" %} type="text/javascript"></script>
+  <script src={% static "main/lib/jquery.sparkline.js" %}></script>
+  
+  <!--common script for all pages-->
+  <script src={% static "main/lib/common-scripts.js" %} ></script>
+  <script type="text/javascript" src={% static "main/lib/gritter/js/jquery.gritter.js" %}></script>
+  <script type="text/javascript" src={% static "main/lib/gritter-conf.js" %}></script>
+  
+  <!--script for this page-->
+  <script src={% static "main/lib/sparkline-chart.js" %}></script>
+  <script src={% static "main/lib/zabuto_calendar.js" %}></script>
+  <script src={% static "main/lib/materials.js" %}></script>
+ 
+
+
+    
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+

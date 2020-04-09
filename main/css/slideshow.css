@@ -1,0 +1,27 @@
+
+/* color code*/
+.foo {
+     width: 0;
+      height: 0;
+	  margin-left: 50px;
+      margin-bottom:10px;
+	  margin-right:10px;
+      border-left: 25px solid transparent;
+      border-right: 25px solid transparent;
+}
+
+.ironore {
+ 
+  border-bottom: 30px solid #5E0614;
+}
+
+.limestone {
+ 
+  border-bottom: 30px solid #D2C8C7;
+}
+
+.coal {
+ 
+  border-bottom: 30px solid #0A0B0A;
+}
+

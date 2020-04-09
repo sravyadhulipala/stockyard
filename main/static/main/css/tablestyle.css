@@ -1,0 +1,37 @@
+#customtable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customtable td, #customtable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customtable tr:nth-child(odd){background-color: #f2f2f2;}
+#customtable tr:nth-child(even){background-color: #ffffff;}
+
+#customtable tr:hover {background-color: #ddd;}
+
+#customtable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #1a1a1a;
+  color: white;
+}
+
+.btn-theme1 {
+  color: #fff;
+  background-color: #203c61;
+  border-color: #203c61;/*#1a314f;*/
+}
+.btn-theme1:hover,
+.btn-theme1:focus,
+.btn-theme1:active,
+.open .dropdown-toggle.btn-theme1 {
+  color: #fff;
+  background-color: #284a78;
+  border-color: #284a78;
+}
